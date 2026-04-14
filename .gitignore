@@ -1,0 +1,33 @@
+# Binários
+bin/
+main
+lazyarduino
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Pacotes e Dependências
+# (Geralmente não ignoramos go.sum, mas ignoramos pastas de vendor se você as usar)
+vendor/
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+.DS_Store
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.nvim.lua
+
+# Arduino-cli (Arquivos gerados se você rodar comandos de teste localmente)
+build/
+*.hex
+*.elf
+*.bin
+*.zip
