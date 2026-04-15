@@ -1,41 +1,43 @@
-package main
+package commands
 
 import (
 	"encoding/json"
 	"os/exec"
 )
 
-type Port struct {
-	Adress   string `json:"adress"`
-	Protocol string `json:"protocol"`
+type BoardListResponse struct {
+	DetectedPorts []BoardInfo `json:"detected_ports"`
 }
 
-type MathchingBoard struct {
+type BoardInfo struct {
+	MatchingBoards []MatchingBoard `json:"matching_boards"`
+	Port           Port            `json:"port"`
+}
+
+type MatchingBoard struct {
 	Name string `json:"name"`
 	FQBN string `json:"fqbn"`
 }
 
-type BoardInfo struct {
-	MathchingBoard []MathchingBoard `json:"mathchingBoard"`
-	Port           []Port           `json:"port"`
+type Port struct {
+	Address string `json:"address"`
 }
 
-// ListBoards executa 'arduino-cli board list --format json'
+// ListBoards Retorna o json formatado com a Porta e a Placa
 func ListBoards() ([]BoardInfo, error) {
-	// Preparamos o comando externo
 	cmd := exec.Command("arduino-cli", "board", "list", "--format", "json")
-
-	// Capturamos a saída (stdout)
 	output, err := cmd.Output()
 	if err != nil {
 		return nil, err
 	}
 
-	// Fazemos o Parse do JSON para a nossa slice de structs
-	var boards []BoardInfo
-	if err := json.Unmarshal(output, &boards); err != nil {
+	// Criamos a variável do tipo "raiz" (objeto)
+	var resp BoardListResponse
+
+	// Fazemos o unmarshal no objeto raiz
+	if err := json.Unmarshal(output, &resp); err != nil {
 		return nil, err
 	}
 
-	return boards, nil
+	return resp.DetectedPorts, nil
 }

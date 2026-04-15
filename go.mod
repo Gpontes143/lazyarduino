@@ -1,3 +1,3 @@
-module github.com/Gpontes143/lazyarduino
+module lazyarduino
 
 go 1.26.1

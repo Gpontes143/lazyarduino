@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt" // Ajuste conforme o nome do seu módulo
+	"fmt"
 	"log"
 
-	"github.com/Gpontes143/lazyarduino/pkg/commands"
+	"lazyarduino/pkg/commands"
 )
 
 func main() {
@@ -25,6 +25,6 @@ func main() {
 		if len(b.MatchingBoards) > 0 {
 			nome = b.MatchingBoards[0].Name
 		}
-		fmt.Printf("- Porta: %s | Placa: %s\n", b.Port.Address, nome)
+		fmt.Printf("- Porta: %s | Placa: %s\n", b.Port, nome)
 	}
 }
