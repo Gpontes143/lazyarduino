@@ -7,7 +7,7 @@ import (
 	"lazyarduino/pkg/commands"
 )
 
-func main() {
+func board() {
 	fmt.Println("Buscando placas conectadas...")
 
 	boards, err := commands.ListBoards()
@@ -27,4 +27,8 @@ func main() {
 		}
 		fmt.Printf("- Porta: %s | Placa: %s\n", b.Port, nome)
 	}
+}
+
+func main() {
+	board()
 }
