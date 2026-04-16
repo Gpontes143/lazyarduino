@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"lazyarduino/pkg/commands"
+	"lazyarduino/ui"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func board() (string, string) {
@@ -53,12 +57,17 @@ func upload(port string, fqbn string, path string) {
 }
 
 func main() {
-	fqbn, port := board()
-	path := "."
-	if fqbn == "" || port == "" {
-		fmt.Println("Não foi possivel identificar o fqbn automaticamente ou a placa!")
+	tela := tea.NewProgram(ui.NewModel(), tea.WithAltScreen())
+	if _, err := tela.Run(); err != nil {
+		fmt.Printf("Erro ao iniciar lazyarduino: %v", err)
+		os.Exit(1)
 	}
-
-	compile(fqbn, path)
-	upload(port, fqbn, path)
+	// fqbn, port := board()
+	// path := "."
+	// if fqbn == "" || port == "" {
+	// 	fmt.Println("Não foi possivel identificar o fqbn automaticamente ou a placa!")
+	// }
+	//
+	// compile(fqbn, path)
+	// upload(port, fqbn, path)
 }
