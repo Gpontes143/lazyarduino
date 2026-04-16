@@ -18,12 +18,13 @@ func (m model) View() string {
 	rightWidth := m.Width - leftWidth - 4 // -4 compensa bordas e espaçamentos
 
 	// 2. CONSTRUÇÃO DA COLUNA ESQUERDA
-
 	// Painel [1] Status
 	statusStyle := themes.GetPanelStyle(m.Focused == 1)
-	statusContent := m.Spinner.View() + " Aguardando..."
+	projectLine := themes.TitleStyle.Render(themes.IconProject + " " + m.ProjectName)
+	statusContent := m.Spinner.View() + " " + themes.IconStatus + " " + m.StatusMsg
+	statusBody := projectLine + "\n" + statusContent
 	statusBox := statusStyle.Width(leftWidth).Render(
-		themes.TitleStyle.Render("[1] Status") + "\n" + statusContent,
+		themes.TitleStyle.Render("[1] Status") + "\n\n" + statusBody,
 	)
 
 	// Painel [2] Placas

@@ -7,7 +7,11 @@ var (
 	Black = lipgloss.Color("#121010")
 	White = lipgloss.Color("#F2F3F4")
 
-	BaseStyle = lipgloss.NewStyle().
+	IconProject = " "
+	IconStatus  = " "
+	IconBoard   = " "
+	IconSerial  = "󱇰"
+	BaseStyle   = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(White).
 			Padding(0, 1)

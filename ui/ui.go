@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"lazyarduino/pkg/utils"
+
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/viewport"
@@ -8,12 +10,14 @@ import (
 )
 
 type model struct {
-	List    list.Model
-	Spinner spinner.Model
-	Serial  viewport.Model
-	Width   int
-	Height  int
-	Focused int
+	List        list.Model
+	Spinner     spinner.Model
+	Serial      viewport.Model
+	ProjectName string
+	StatusMsg   string
+	Width       int
+	Height      int
+	Focused     int
 }
 
 func NewModel() model {
@@ -24,9 +28,11 @@ func NewModel() model {
 	lista.Title = "Placas"
 
 	return model{
-		Spinner: elementspiner,
-		List:    lista,
-		Focused: 2,
+		Spinner:     elementspiner,
+		List:        lista,
+		Focused:     2,
+		ProjectName: utils.GetProjectName(),
+		StatusMsg:   "Pronto",
 	}
 }
 
@@ -45,6 +51,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "tab":
 			m.Focused = (m.Focused + 1) % 4
+			return m, nil
+		case "1":
+			m.Focused = 1 % 4
+			return m, nil
+		case "2":
+			m.Focused = 2 % 4
+		case "3":
+			m.Focused = 3 % 4
+			return m, nil
+		case "0":
+			m.Focused = 0 % 4
 			return m, nil
 		}
 	case tea.WindowSizeMsg:
