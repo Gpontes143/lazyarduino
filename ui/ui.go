@@ -11,8 +11,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-// --- DEFINIÇÃO DO ITEM DA LISTA ---
-// Como o utils não tem isso, definimos aqui para a List funcionar.
 type item struct {
 	title, desc string
 }
@@ -46,6 +44,7 @@ type model struct {
 	IsWorking   bool
 }
 
+// runCompile Pega os dados fqbn(core) e o path para gerar o binario
 func (m model) runCompile() tea.Cmd {
 	return func() tea.Msg {
 		fqbn, _ := board()
@@ -54,6 +53,7 @@ func (m model) runCompile() tea.Cmd {
 	}
 }
 
+// runUpload Recebe os dados fqbn(core),port e path para criar e enviar o codigo para a placa
 func (m model) runUpload() tea.Cmd {
 	return func() tea.Msg {
 		fqbn, port := board()
@@ -65,6 +65,7 @@ func (m model) runUpload() tea.Cmd {
 	}
 }
 
+// updateBoardsCmd Recebe uma lista de itens conectados da placa usb do computador
 func (m model) updateBoardsCmd() tea.Cmd {
 	return func() tea.Msg {
 		boards, _ := commands.ListBoards()
@@ -83,6 +84,7 @@ func (m model) updateBoardsCmd() tea.Cmd {
 	}
 }
 
+// board Coletor de dados sobre o comando list do arduino cli
 func board() (string, string) {
 	boards, err := commands.ListBoards()
 	if err != nil || len(boards) == 0 {
@@ -98,6 +100,7 @@ func board() (string, string) {
 
 // --- CORE ---
 
+// NewModel [TODO:description]
 func NewModel() model {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
@@ -119,21 +122,21 @@ func NewModel() model {
 	}
 }
 
+// Init Faz com que os processos a seguir sejam iniciados na inicializacao do tui
 func (m model) Init() tea.Cmd {
 	return tea.Batch(m.Spinner.Tick, m.updateBoardsCmd())
 }
 
+// Update Atualiza o Tui
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	var cmds []tea.Cmd // A nossa lista de comandos para despachar
-
+	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// Se estiver a trabalhar, bloqueia inputs para não bugar
 		if m.IsWorking && msg.String() != "ctrl+c" && msg.String() != "q" {
 			return m, nil
 		}
-
 		switch msg.String() {
 		case "ctrl+c", "q":
 			return m, tea.Quit
@@ -187,7 +190,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case spinner.TickMsg:
-		// O Spinner só anima se IsWorking for true
 		if m.IsWorking {
 			m.Spinner, cmd = m.Spinner.Update(msg)
 			cmds = append(cmds, cmd)
