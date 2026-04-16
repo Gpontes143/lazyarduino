@@ -7,7 +7,7 @@ import (
 	"lazyarduino/pkg/commands"
 )
 
-func board() string {
+func board() (string, string) {
 	fmt.Println("Buscando placas conectadas...")
 
 	boards, err := commands.ListBoards()
@@ -17,18 +17,19 @@ func board() string {
 
 	if len(boards) == 0 {
 		fmt.Println("Nenhuma placa encontrada.")
-		return ""
+		return "", ""
 	}
 	b := boards[0]
 	fqbn := ""
 	nome := "desconhecido"
-
+	port := ""
+	port = b.Port.Address
 	if len(b.MatchingBoards) > 0 {
 		nome = b.MatchingBoards[0].Name
 		fqbn = b.MatchingBoards[0].FQBN
 	}
-	fmt.Printf("- Porta: %s | Placa: %s\n", b.Port.Address, nome)
-	return fqbn
+	fmt.Printf("- Porta: %s | Placa: %s\n", port, nome)
+	return fqbn, port
 }
 
 func compile(path string, fqbn string) {
@@ -41,11 +42,23 @@ func compile(path string, fqbn string) {
 	fmt.Printf("Compilado com sucesso")
 }
 
-func main() {
-	fqbn := board()
-	path := "."
-	if fqbn == "" {
-		fmt.Println("Não foi possivel identificar o fqbn automaticamente!")
+func upload(port string, fqbn string, path string) {
+	fmt.Println("Upload....")
+	out, err := commands.Upload(port, fqbn, path)
+	if err != nil {
+		fmt.Printf("Erro ao inicia upload: \n%s", out)
+		return
 	}
+	fmt.Println("Processo terminado com sucesso")
+}
+
+func main() {
+	fqbn, port := board()
+	path := "."
+	if fqbn == "" || port == "" {
+		fmt.Println("Não foi possivel identificar o fqbn automaticamente ou a placa!")
+	}
+
 	compile(fqbn, path)
+	upload(port, fqbn, path)
 }
