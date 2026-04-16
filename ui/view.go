@@ -28,11 +28,11 @@ func (m model) View() string {
 	)
 
 	// Painel [2] Placas
-	boardStyle := themes.GetPanelStyle(m.Focused == 2)
 	// Ajustamos o tamanho interno da lista para caber no box
 	m.List.SetSize(leftWidth-2, 10)
-	boardBox := boardStyle.Width(leftWidth).Render(m.List.View())
-
+	boardBox := themes.GetPanelStyle(m.Focused == 2).Width(leftWidth).Render(
+		themes.TitleStyle.Render("[2] Placas") + "\n\n" + m.List.View(),
+	)
 	// Painel [3] Recursos (Apenas placeholder por enquanto)
 	recursosStyle := themes.GetPanelStyle(m.Focused == 3)
 	recursosBox := recursosStyle.Width(leftWidth).Render(

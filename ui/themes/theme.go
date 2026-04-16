@@ -7,7 +7,7 @@ var (
 	Black = lipgloss.Color("#121010")
 	White = lipgloss.Color("#F2F3F4")
 
-	IconProject = " "
+	IconProject = ""
 	IconStatus  = " "
 	IconBoard   = " "
 	IconSerial  = "󱇰"
