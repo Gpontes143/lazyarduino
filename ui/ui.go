@@ -46,8 +46,6 @@ type model struct {
 	IsWorking   bool
 }
 
-// --- COMANDOS (GOROUTINES) ---
-
 func (m model) runCompile() tea.Cmd {
 	return func() tea.Msg {
 		fqbn, _ := board()
@@ -76,7 +74,6 @@ func (m model) updateBoardsCmd() tea.Cmd {
 			if len(b.MatchingBoards) > 0 {
 				nome = b.MatchingBoards[0].Name
 			}
-			// Usando a struct local 'item'
 			items = append(items, item{
 				title: nome,
 				desc:  b.Port.Address,
@@ -144,7 +141,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Focused = (m.Focused + 1) % 4
 		case "1", "2", "3", "0":
 			m.Focused = int(msg.String()[0] - '0')
-		case "r":
+		case "l":
 			m.IsWorking = true
 			m.StatusMsg = "Buscando placas..."
 			// Adicionamos dois comandos ao lote (batch)
@@ -181,8 +178,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case uploadFinishedMsg:
 		m.IsWorking = false
-		m.StatusMsg = "Processo Terminado"
-		m.Serial.SetContent(msg.out)
+		if msg.err != nil {
+			m.StatusMsg = "Erro no upload"
+			m.Serial.SetContent(msg.out)
+		} else {
+			m.StatusMsg = "Processo Terminado"
+			m.Serial.SetContent(msg.out)
+		}
 
 	case spinner.TickMsg:
 		// O Spinner só anima se IsWorking for true

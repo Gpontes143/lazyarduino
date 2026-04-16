@@ -33,7 +33,7 @@ func (m model) View() string {
 	boardBox := themes.GetPanelStyle(m.Focused == 2).Width(leftWidth).Render(
 		themes.TitleStyle.Render("[2] Placas") + "\n\n" + m.List.View(),
 	)
-	// Painel [3] Recursos (Apenas placeholder por enquanto)
+	// Painel [3] Recursos (placeholder)
 	recursosStyle := themes.GetPanelStyle(m.Focused == 3)
 	recursosBox := recursosStyle.Width(leftWidth).Render(
 		themes.TitleStyle.Render("[3] Recursos") + "\n" + "Flash: --\nRAM:   --",
