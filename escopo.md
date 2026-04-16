@@ -11,3 +11,5 @@
 Objetivos futuros:
 Ao detectar um #include sem a devida instalação notificar o usuario e deixar a biblioteca
 com um ponto vermelho
+
+Deixar que o Serial monitor atual seja o console de comando e so mude ao detectar a tecla s do usuario
